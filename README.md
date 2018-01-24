@@ -12,6 +12,8 @@ R package for economic scenarios generation with a g2++ model
 
 ### Zero Coupon Curve
 
+![alt text](https://github.com/arnaudbu/esg2/raw/master/img/curve.png "Zero Coupon Rates")
+
 ### Swaptions
 
 ### Handling correlations
