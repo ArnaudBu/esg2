@@ -12,15 +12,25 @@ R package for economic scenarios generation with a g2++ model
 
 ### Zero Coupon Curve
 
-![alt text](https://github.com/arnaudbu/esg2/raw/master/img/curve.png "Zero Coupon Rates")
+![Zero Coupon Rates](https://github.com/arnaudbu/esg2/raw/master/img/curve.png "Zero Coupon Rates")
 
 ### Swaptions
+
+![Swaptions volatility surface](https://github.com/arnaudbu/esg2/raw/master/img/swaptions.png "Swaptions volatility surface")
 
 ### Handling correlations
 
 ### Rate Model
 
+![Rate model projections](https://github.com/arnaudbu/esg2/raw/master/img/projectiong2.png "Rate model projections")
+
+![Rate model deflator test](https://github.com/arnaudbu/esg2/raw/master/img/test_deflator.png "Rate model deflator test")
+
 ### Black & Scholes Model
+
+![B&S model projections](https://github.com/arnaudbu/esg2/raw/master/img/action_traj.png "B&S model projections")
+
+![B&S model martingality test](https://github.com/arnaudbu/esg2/raw/master/img/mart.png "B&S model martingality test")
 
 ## Authors
 
