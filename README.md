@@ -19,6 +19,16 @@ The package is available from its GitHub repository.
 devtools::install_github("arnaudbu/esg2")
 ```
 
+## Model
+
+The G2++ model implemented in this package is described by the following equation:
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\left\{\begin{matrix}&space;dx(t)&space;=&space;-ax(t)&space;&plus;&space;\sigma&space;dW_1(t)&space;\\&space;dy(t)&space;=&space;-by(t)&space;&plus;&space;\eta&space;dW_2(t)&space;\\&space;\rho&space;dt&space;=&space;dW_1(t)dW_2(t)&space;\\&space;\\&space;r(t)&space;=&space;x(t)&space;&plus;&space;y(t)&space;&plus;&space;\phi(t)&space;\end{matrix}\right." target="_blank"><img src="https://latex.codecogs.com/gif.latex?\left\{\begin{matrix}&space;dx(t)&space;=&space;-ax(t)&space;&plus;&space;\sigma&space;dW_1(t)&space;\\&space;dy(t)&space;=&space;-by(t)&space;&plus;&space;\eta&space;dW_2(t)&space;\\&space;\rho&space;dt&space;=&space;dW_1(t)dW_2(t)&space;\\&space;\\&space;r(t)&space;=&space;x(t)&space;&plus;&space;y(t)&space;&plus;&space;\phi(t)&space;\end{matrix}\right." title="\left\{\begin{matrix} dx(t) = -ax(t) + \sigma dW_1(t) \\ dy(t) = -by(t) + \eta dW_2(t) \\ \rho dt = dW_1(t)dW_2(t) \\ \\ r(t) = x(t) + y(t) + \phi(t) \end{matrix}\right." /></a>
+
+The Black & Scholes model implemented for related assets follows the classical model, with a time-dependant interest rate.
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=dS(t)&space;=&space;r(t)S(t)dt&space;&plus;&space;\omega&space;S(t)dW_s(t)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?dS(t)&space;=&space;r(t)S(t)dt&space;&plus;&space;\omega&space;S(t)dW_s(t)" title="dS(t) = r(t)S(t)dt + \omega S(t)dW_s(t)" /></a>
+
 ## Documentation
 
 The script file [test_esg2.R](https://github.com/arnaudbu/esg2/raw/master/test_esg2.R) contains all the usefull commands in order to run an end to end example with this package.
@@ -104,15 +114,127 @@ plot(swaptions)
 
 ### Handling correlations
 
+Correlations needs to be handled between at least the two components of the rate model, and for associated assets using the projected rates in a Black & Scholes context.
+
+We thus need to generate W_1 and W_2 processes with a rho correlation, and take into account the correlations between the other Wiener's process.
+
+A function, `genW` is thus implemented in order to generate as many correlated processes as needed:
+
+This function takes as argument the correlation matrix between the different process, the horizon for projection and the number of desired simulations.
+
+> In order to get the calibrated parameters of the rate model, this function should be run after the calibration process.
+
+```r
+?genW
+
+correl <- cbind(c(1,g2model@rho, 0.25),c(g2model@rho,1, 0), c(0.25, 0, 1))
+W <- genW(correl, g2model@nsimul, g2model@horizon)
+
+```
+
 ### Rate Model
 
+#### Initialization
+
+The rate model is initialized via a zero coupon curve, a projection horizon and a number of simulation.
+
+It is possible to directly pass the parameters of the model as arguments in order to skip the calibration step.
+
+```r
+?g2
+
+g2model <- g2(curve, horizon = 50, nsimul = 1000)
+```
+
+#### Calibration
+
+Calibration is performed on the model over a panel of swaptions defined in a *Swaption* object.
+
+The optimized function for the process is a trade off between the differences between theoretical and observed prices and the probability to get negative rates. The optimal parameters are found with a Nelder-Mead algorithm followed by a Newton-Rhaphson method.
+
+```r
+?calibrate
+
+g2model <- calibrate(g2model, swaptions, maxIter = 100)
+```
+
+#### Projection and Visualization
+
+Once calibrated, the model is projected via the function `project`.
+
+It is possible to pass Wx and Wy as optional arguments, that corresponds to W_1 and W_2 in the model equation and are generated to be correlated between themselves and with other assets. If not given, those two processes are computed with the rho parameter of the model, without taking into account any external process.
+
+```r
+?project
+
+g2model <- project(g2model, Wx = W[,,1], Wy = W[,,2])
+```
+
+It is possible to display, print, and plot the model. For the later case, 100 scenarios are displayed, along with the mean trajectory and the standard deviation around the mean.
+
+```r
+g2model
+print(g2model)
+plot(g2model)
+```
+
 <img src="https://github.com/arnaudbu/esg2/raw/master/img/projectiong2.png" width="50%"/>
+
+Once the projection are realized, it is possible to get the deflator or the projected zero-coupon prices table at a time t.
+
+```r
+# Get deflator table
+?deflator
+def <- deflator(g2model)
+
+# Get zero coupon table at time 10
+?zctable
+zc10 <- zctable(g2model, 10)
+```
+
+#### Validation
+
+```r
+?test_deflator
+test_deflator(g2model)
+```
 
 <img src="https://github.com/arnaudbu/esg2/raw/master/img/test_deflator.png" width="50%"/>
 
 ### Black & Scholes Model
 
+#### Initialization
+
+```r
+?bs
+
+action <- bs(g2model,
+             s0 = 100,
+             vol = 0.2,
+             div = 0.02,
+             rho = -0.5,
+             W = W[,,3])
+```
+
+#### Projection and Visualization
+
+```r
+?traj
+trajAction <- traj(action)
+
+action
+print(action)
+plot(action)
+```
+
 <img src="https://github.com/arnaudbu/esg2/raw/master/img/action_traj.png" width="50%"/>
+
+#### Validation
+
+```r
+?test_martingal
+test_martingal(action)
+```
 
 <img src="https://github.com/arnaudbu/esg2/raw/master/img/mart.png" width="50%"/>
 
