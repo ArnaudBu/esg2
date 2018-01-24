@@ -1,14 +1,31 @@
 # esg2
 
-R package for economic scenarios generation with a g2++ model
+R package for risk neutral economic scenarios generation with a g2++ model
 
 ## Getting started
 
 ### Prerequisites
 
+**esg2** only relies on *R* default libraries, but is not available on *CRAN*, which means the package `devtools` is required in order to install it directly from its GitHub repository.
+
+```R
+install.packages("devtools")
+```
+
 ### Installation
 
+The package is available from its GitHub repository.
+
+
+```R
+devtools::install_github("arnaudbu/esg2")
+```
+
 ## Documentation
+
+The script file [test_esg2.R](https://github.com/arnaudbu/esg2/raw/master/test_esg2.R) contains all the usefull commands in order to run an end to end example with this package.
+
+All the functions of the package are documented through *R*'s `help()` function.
 
 ### Zero Coupon Curve
 
