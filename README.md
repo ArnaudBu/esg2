@@ -194,6 +194,10 @@ zc10 <- zctable(g2model, 10)
 
 #### Validation
 
+The deflator test is also implemented in the package. This test aims to verify that the means of the deflator values match the zero coupon curve for every maturity.
+
+The function `test_deflator` plot the zero coupon curve against the mean of the deflator for each maturity, along with a table displaying the absolute differences in points. 
+
 ```r
 ?test_deflator
 test_deflator(g2model)
@@ -203,7 +207,20 @@ test_deflator(g2model)
 
 ### Black & Scholes Model
 
+The library allows to use a Black & Scholes model for asset projection with the projected rate model.
+
 #### Initialization
+
+Initializing a Black & Scholes modelized asset requires:
+
++ a calibrated and projected rate model;
++ an initial value for the projection;
++ a volatility for the asset;
++ a dividend rate, as the proportion of the value of the asset that is paid each year as dividends or rent;
++ the correlation with the rate model;
++ the generated distribution for W_s.
+
+The last value is optional. If not provided, a distribution is computed with the given correlation.
 
 ```r
 ?bs
@@ -218,6 +235,8 @@ action <- bs(g2model,
 
 #### Projection and Visualization
 
+All the traditional display functions are available, and the trajectories can be extracted with the function `trajAction`. 
+
 ```r
 ?traj
 trajAction <- traj(action)
@@ -230,6 +249,10 @@ plot(action)
 <img src="https://github.com/arnaudbu/esg2/raw/master/img/action_traj.png" width="50%"/>
 
 #### Validation
+
+The martingality test is implemented.
+
+The means of the discounted value of the asset is ploted with the 95% confidence interval of its values.
 
 ```r
 ?test_martingal
