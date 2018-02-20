@@ -14,13 +14,13 @@ genW(correl, s = 1000, p = 50)
 \item{p}{Number of periods. Default to 50.}
 }
 \value{
-An array of dimension s * p * dim(correl) correspondings to the simulations
+An array of dimension s * p * dim(correl) corresponding to the simulations.
 }
 \description{
-\code{genW} generates differents sets of centered normal distribution tables with specified correlations.
+\code{genW} generates different sets of centered normal distribution tables with specified correlations.
 }
 \examples{
 correl <- cbind(c(1,-0.9, 0.25, 0.25),c(-0.9,1, 0, 0), c(0.25, 0, 1, 0.25), c(0.25, 0, 0.25, 1))
-varCor <- GenW(correl, 1000, 50)
+varCor <- genW(correl, 1000, 50)
 
 }

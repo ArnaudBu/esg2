@@ -1,16 +1,21 @@
+#### Utility functions for package esg2 ####
+############################################
+
+## Compute the price of a zero coupon bond
+
 #' Zero Coupon Price
 #'
-#' \code{rate2zcp} computes the price of a zero coupon bond for a given maturity and rate.
+#' \code{rate2zcp} computes the price of a zero coupon bond for given maturities and rates.
 #'
 #' @param mat Vector. Maturities of the bound.
 #' @param rate Vector. Panel of rates for which the price is to be computed.
 #' @param method Character. Computation method:
 #' \itemize{
 #'   \item{"continuous": continuous rate. Default value.}
-#'   \item{"actuarial": actuarial rate}
-#'   \item{"libor": libor rate}}
+#'   \item{"actuarial": actuarial rate.}
+#'   \item{"libor": libor rate.}}
 #'
-#' @return The zero coupon prices associated to the maturity
+#' @return The zero coupon prices associated to the maturity.
 #'
 #' @examples rate2zcp(1, 0.01, "continuous")
 #'
@@ -29,6 +34,8 @@ rate2zcp <- function(mat, rate, method = "continuous"){
 ##############################
 ##############################
 
+## Rate computation
+
 #' Rate computation
 #'
 #' \code{zcp2rate} computes the rate equivalent to a zero coupon price for a maturity.
@@ -38,10 +45,10 @@ rate2zcp <- function(mat, rate, method = "continuous"){
 #' @param method Character. Computation method:
 #' \itemize{
 #'   \item{"continuous": continuous rate. Default value.}
-#'   \item{"actuarial": actuarial rate}
-#'   \item{"libor": libor rate}}
+#'   \item{"actuarial": actuarial rate.}
+#'   \item{"libor": libor rate.}}
 #'
-#' @return The rates associated to the maturity
+#' @return The rates associated to the maturities.
 #'
 #' @examples zcp2rate(1, 0.9900498, "continuous")
 #'
@@ -90,19 +97,24 @@ M_g2 <- function(a, b, sigma, eta, rho, T){
   return(r)
 }
 
+##############################
+##############################
+
+## Generation of correlated variables
+
 #' Generate correlated variables
 #'
-#' \code{genW} generates differents sets of centered normal distribution tables with specified correlations.
+#' \code{genW} generates different sets of centered normal distribution tables with specified correlations.
 #'
 #'
 #' @param correl Matrix. Correlation matrix for the inputs.
 #' @param s Numeric. Number of simulation. Default to 1000.
 #' @param p Number of periods. Default to 50.
-#' @return An array of dimension s * p * dim(correl) correspondings to the simulations
+#' @return An array of dimension s * p * dim(correl) corresponding to the simulations.
 #'
 #' @examples
 #' correl <- cbind(c(1,-0.9, 0.25, 0.25),c(-0.9,1, 0, 0), c(0.25, 0, 1, 0.25), c(0.25, 0, 0.25, 1))
-#' varCor <- GenW(correl, 1000, 50)
+#' varCor <- genW(correl, 1000, 50)
 #'
 #' @export
 genW=function(correl, s = 1000, p = 50)
@@ -121,4 +133,13 @@ genW=function(correl, s = 1000, p = 50)
     V[i,,]=V_norm[i,,] %*% R
   }
   return(V)
+}
+
+##############################
+##############################
+
+## Validity check for class ZCCurve
+
+check_zc <- function(object){
+  if(!(object@method %in% c("continuous", "actuarial", "libor"))) stop("Invalid method for class ZCCurve.")
 }

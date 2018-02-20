@@ -1,12 +1,17 @@
 Package: esg2
 Type: Package
-Title: Implementation of an esg based on a G2++ model
+Title: Esg Based on a G2++ Model
 Version: 0.1.0
 Author: Arnaud Buzzi
 Maintainer: Arnaud Buzzi <arnaud.buzzi@sia-partners.com>
-Description: Implementation of an esg based on a G2++ model for alimenting ALM modelling.
+Description: Implementation of an esg based on a G2++ model for 
+            alimenting ALM modelling. Includes rates modelling and any
+            Black & Scholes related asset. A thorough description of 
+            the model can be found in 
+            D. Brigo, F. Mercurio (2006) <doi:10.1007/978-3-540-34604-3>.
 License: GPL (>2)
 Encoding: UTF-8
+Suggests: methods
 LazyData: true
 RoxygenNote: 6.0.1
 Collate: 

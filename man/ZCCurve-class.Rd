@@ -3,18 +3,44 @@
 \docType{class}
 \name{ZCCurve-class}
 \alias{ZCCurve-class}
+\alias{plot,ZCCurve,missing-method}
+\alias{print,ZCCurve-method}
+\alias{show,ZCCurve-method}
 \title{Zero Coupon Curve}
-\description{
-An S4 class to represent a zero coupon curve.
+\usage{
+\S4method{plot}{ZCCurve,missing}(x, y)
+
+\S4method{print}{ZCCurve}(x)
+
+\S4method{show}{ZCCurve}(object)
 }
+\arguments{
+\item{x}{the Zero Coupon Curve object to plot}
+
+\item{y}{classical plot parameters. Useless here.}
+
+\item{object}{the Zero Coupon Curve object to show}
+}
+\description{
+A S4 class to represent a zero coupon curve.
+}
+\section{Methods (by generic)}{
+\itemize{
+\item \code{plot}: plot method for ZCCurve
+
+\item \code{print}: print method for ZCCurve
+
+\item \code{show}: show method for ZCCurve
+}}
+
 \section{Slots}{
 
 \describe{
 \item{\code{method}}{Character. Method for discounting the curve:
 \itemize{
   \item{"continuous": continuous rate. Default value.}
-  \item{"actuarial": actuarial rate}
-  \item{"libor": libor rate}}}
+  \item{"actuarial": actuarial rate.}
+  \item{"libor": libor rate}.}}
 
 \item{\code{rates}}{Vector. List of rates from maturity 1 to horizon.}
 

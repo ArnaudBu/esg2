@@ -12,17 +12,20 @@ curvezc(rates, method)
 \item{method}{Character. Computation method:
 \itemize{
   \item{"continuous": continuous rate. Default value.}
-  \item{"actuarial": actuarial rate}
-  \item{"libor": libor rate}}}
+  \item{"actuarial": actuarial rate.}
+  \item{"libor": libor rate.}}}
 }
 \value{
-The curve
+The curve object.
 }
 \description{
 \code{curvezc} creates a zero coupon curve object.
 }
+\details{
+Rates are assumed to go from period time 1 to period time equal to the length of the vector. For example, for a rate curve equal to c(0.01, 0.015, 0.02), the period considered are c(1,2,3).
+}
 \examples{
-rates <- c(-0.00316,-0.00269,-0.00203,-0.00122,-0.00022,0.00092,0.00215,0.00342,0.00465,0.00581,0.00684,0.00777,0.00861,0.00933,0.00989,0.0103,0.01061,0.01092,0.01127,0.0117,0.01222,0.01281,0.01345,0.01411,0.01478,0.01546,0.01613,0.01679,0.01743,0.01806,0.01867,0.01926,0.01983,0.02038,0.02092,0.02143,0.02192,0.02239,0.02285,0.02329,0.02371,0.02411,0.0245,0.02488,0.02524,0.02558,0.02592,0.02624,0.02655,0.02685)
-curve <-curvezc(rates, "continuous")
+ rates <- c(-0.00316,-0.00269,-0.00203,-0.00122,-0.00022,0.00092,0.00215,0.00342,0.00465,0.00581,0.00684,0.00777,0.00861,0.00933,0.00989,0.0103,0.01061,0.01092,0.01127,0.0117,0.01222,0.01281,0.01345,0.01411,0.01478,0.01546,0.01613,0.01679,0.01743,0.01806,0.01867,0.01926,0.01983,0.02038,0.02092,0.02143,0.02192,0.02239,0.02285,0.02329,0.02371,0.02411,0.0245,0.02488,0.02524,0.02558,0.02592,0.02624,0.02655,0.02685)
+ curve <-curvezc(rates, "continuous")
 
 }

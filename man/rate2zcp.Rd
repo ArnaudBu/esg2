@@ -14,14 +14,14 @@ rate2zcp(mat, rate, method = "continuous")
 \item{method}{Character. Computation method:
 \itemize{
   \item{"continuous": continuous rate. Default value.}
-  \item{"actuarial": actuarial rate}
-  \item{"libor": libor rate}}}
+  \item{"actuarial": actuarial rate.}
+  \item{"libor": libor rate.}}}
 }
 \value{
-The zero coupon prices associated to the maturity
+The zero coupon prices associated to the maturity.
 }
 \description{
-\code{rate2zcp} computes the price of a zero coupon bond for a given maturity and rate.
+\code{rate2zcp} computes the price of a zero coupon bond for given maturities and rates.
 }
 \examples{
 rate2zcp(1, 0.01, "continuous")
