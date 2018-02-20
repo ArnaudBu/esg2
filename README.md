@@ -6,7 +6,7 @@ R package for risk neutral economic scenarios generation with a g2++ model
 
 ### Prerequisites
 
-**esg2** only relies on *R* default libraries, but is not available on *CRAN*, which means the package `devtools` is required in order to install it directly from its GitHub repository.
+**esg2** only relies on *R* default libraries. The package `devtools` is required in order to install it directly from its GitHub repository.
 
 ```r
 install.packages("devtools")
