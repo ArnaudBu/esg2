@@ -3,10 +3,36 @@
 \docType{class}
 \name{G2-class}
 \alias{G2-class}
+\alias{plot,G2,missing-method}
+\alias{print,G2-method}
+\alias{show,G2-method}
 \title{G2 Model}
+\usage{
+\S4method{plot}{G2,missing}(x, y)
+
+\S4method{print}{G2}(x)
+
+\S4method{show}{G2}(object)
+}
+\arguments{
+\item{x}{the G2 object to plot}
+
+\item{y}{classical plot parameters. Useless here.}
+
+\item{object}{the G2 object to show}
+}
 \description{
 An S4 class to represent a G2 ++ model.
 }
+\section{Methods (by generic)}{
+\itemize{
+\item \code{plot}: plot method for G2
+
+\item \code{print}: print method for G2
+
+\item \code{show}: show method for G2
+}}
+
 \section{Slots}{
 
 \describe{

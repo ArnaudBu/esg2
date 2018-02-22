@@ -1,3 +1,7 @@
+#### G2 Class ####
+##################
+
+
 #' G2 Model
 #'
 #' An S4 class to represent a G2 ++ model.
@@ -31,13 +35,15 @@ setClass(Class = "G2",
            y = "matrix",
            r = "matrix",
            Wx = "matrix"
-         )
+         ),
+         validity = check_g2
 )
 
 ############################################
 ############################################
 
-# Initializator for class G2
+## Initializator for class G2
+
 setMethod(
   f = "initialize",
   signature = "G2",
@@ -52,6 +58,7 @@ setMethod(
     .Object@horizon <- horizon
     .Object@nsimul <- nsimul
     # Return object
+    validObject(.Object)
     return(.Object)
   }
 )
@@ -59,7 +66,7 @@ setMethod(
 ############################################
 ############################################
 
-# User constructor function
+## User constructor function
 
 #' G2 ++ model: constructor
 #'
@@ -76,9 +83,18 @@ setMethod(
 #'
 #' @return The model as a class
 #'
-#' @examples rates <- c(-0.00316,-0.00269,-0.00203,-0.00122,-0.00022,0.00092,0.00215,0.00342,0.00465,0.00581,0.00684,0.00777,0.00861,0.00933,0.00989,0.0103,0.01061,0.01092,0.01127,0.0117,0.01222,0.01281,0.01345,0.01411,0.01478,0.01546,0.01613,0.01679,0.01743,0.01806,0.01867,0.01926,0.01983,0.02038,0.02092,0.02143,0.02192,0.02239,0.02285,0.02329,0.02371,0.02411,0.0245,0.02488,0.02524,0.02558,0.02592,0.02624,0.02655,0.02685)
+#' @examples rates <- c(-0.00316,-0.00269,-0.00203,-0.00122,
+#' -0.00022,0.00092,0.00215,0.00342,0.00465,0.00581,
+#' 0.00684,0.00777,0.00861,0.00933,0.00989,0.0103,
+#' 0.01061,0.01092,0.01127,0.0117,0.01222,0.01281,
+#' 0.01345,0.01411,0.01478,0.01546,0.01613,0.01679,
+#' 0.01743,0.01806,0.01867,0.01926,0.01983,0.02038,
+#' 0.02092,0.02143,0.02192,0.02239,0.02285,0.02329,
+#' 0.02371,0.02411,0.0245,0.02488,0.02524,0.02558,
+#' 0.02592,0.02624,0.02655,0.02685)
 #' @examples curve <-curvezc(rates, "continuous")
-#' @examples g2model <- g2(curve, a=0.773511777, b=0.082013014, sigma=0.022284644, eta=0.010382461, rho=-0.701985206)
+#' @examples g2model <- g2(curve, a=0.773511777, b=0.082013014,
+#' sigma=0.022284644, eta=0.010382461, rho=-0.701985206)
 #'
 #' @export
 g2 <- function(curve, horizon = 50, nsimul = 1000, a = numeric(0), b = numeric(0), sigma = numeric(0), eta = numeric(0), rho = numeric(0)){
@@ -97,13 +113,17 @@ g2 <- function(curve, horizon = 50, nsimul = 1000, a = numeric(0), b = numeric(0
 ############################################
 ############################################
 
-# Plot method for class G2
-#' @importFrom graphics plot abline layout legend lines mtext par points title matplot
+## Plot method for class G2
+
+#' @describeIn G2 plot method for G2
+#' @param x the G2 object to plot
+#' @param y classical plot parameters. Useless here.
+#' @import graphics grDevices
 #' @export
 setMethod(
   f = "plot",
   signature = signature(x = "G2", y = "missing"),
-  definition = function(x, y, ...){
+  definition = function(x, y){
     tr <- x@r
     tr2 <- tr
     if(nrow(tr) > 100){
@@ -121,7 +141,9 @@ setMethod(
 ############################################
 ############################################
 
-# Print method for class G2
+## Print method for class G2
+
+#' @describeIn G2 print method for G2
 #' @export
 setMethod(
   f = "print",
@@ -140,7 +162,10 @@ setMethod(
 ############################################
 ############################################
 
-# Show method for class G2
+## Show method for class G2
+
+#' @describeIn G2 show method for G2
+#' @param object the G2 object to show
 #' @export
 setMethod(
   f = "show",
@@ -159,22 +184,32 @@ setMethod(
 ############################################
 ############################################
 
+## Projection function
+
 #' G2 ++ model: projection
 #'
 #' \code{project} projects the rate model for the object G2.
 #'
+#' @param .Object G2 object. The object whose model is to be projected.
 #' @param Wx Matrix. Matrix of dimension Number of simulations x Horizon representing the normal distribution for projection of the x component.
 #' @param Wy Matrix. Matrix of dimension Number of simulations x Horizon representing the normal distribution for projection of the y component. Correlation rho with Wx.
 #'
 #' @return The updated object.
 #'
-#' @examples rates <- c(-0.00316,-0.00269,-0.00203,-0.00122,-0.00022,0.00092,0.00215,0.00342,0.00465,0.00581,0.00684,0.00777,0.00861,0.00933,0.00989,0.0103,0.01061,0.01092,0.01127,0.0117,0.01222,0.01281,0.01345,0.01411,0.01478,0.01546,0.01613,0.01679,0.01743,0.01806,0.01867,0.01926,0.01983,0.02038,0.02092,0.02143,0.02192,0.02239,0.02285,0.02329,0.02371,0.02411,0.0245,0.02488,0.02524,0.02558,0.02592,0.02624,0.02655,0.02685)
+#' @examples rates <- c(-0.00316,-0.00269,-0.00203,-0.00122,
+#' -0.00022,0.00092,0.00215,0.00342,0.00465,0.00581,0.00684,
+#' 0.00777,0.00861,0.00933,0.00989,0.0103,0.01061,0.01092,
+#' 0.01127,0.0117,0.01222,0.01281,0.01345,0.01411,0.01478,
+#' 0.01546,0.01613,0.01679,0.01743,0.01806,0.01867,0.01926,
+#' 0.01983,0.02038,0.02092,0.02143,0.02192,0.02239,0.02285,
+#' 0.02329,0.02371,0.02411,0.0245,0.02488,0.02524,0.02558,
+#' 0.02592,0.02624,0.02655,0.02685)
 #' @examples curve <-curvezc(rates, "continuous")
-#' @examples g2model <- g2(curve, a=0.773511777, b=0.082013014, sigma=0.022284644, eta=0.010382461, rho=-0.701985206)
+#' @examples g2model <- g2(curve, a=0.773511777, b=0.082013014,
+#' sigma=0.022284644, eta=0.010382461, rho=-0.701985206)
 #' @examples g2model <- project(g2model)
 #'
 #' @export
-#' @docType methods
 setGeneric(
   name="project",
   def = function(.Object, Wx = "auto", Wy = "auto")
@@ -244,22 +279,32 @@ setMethod(
 ############################################
 ############################################
 
+## Zero coupon table
+
 #' G2 ++ model: construction of a zero coupon prices table.
 #'
 #' \code{zctable} computes the zero coupon prices table at time t under the t-forward measure.
 #'
+#' @param .Object G2 object.
 #' @param t Numeric. Time for computation.
 #'
 #' @return The zero-coupon table at time t.
 #'
-#' @examples rates <- c(-0.00316,-0.00269,-0.00203,-0.00122,-0.00022,0.00092,0.00215,0.00342,0.00465,0.00581,0.00684,0.00777,0.00861,0.00933,0.00989,0.0103,0.01061,0.01092,0.01127,0.0117,0.01222,0.01281,0.01345,0.01411,0.01478,0.01546,0.01613,0.01679,0.01743,0.01806,0.01867,0.01926,0.01983,0.02038,0.02092,0.02143,0.02192,0.02239,0.02285,0.02329,0.02371,0.02411,0.0245,0.02488,0.02524,0.02558,0.02592,0.02624,0.02655,0.02685)
+#' @examples rates <- c(-0.00316,-0.00269,-0.00203,-0.00122,
+#' -0.00022,0.00092,0.00215,0.00342,0.00465,0.00581,0.00684,
+#' 0.00777,0.00861,0.00933,0.00989,0.0103,0.01061,0.01092,
+#' 0.01127,0.0117,0.01222,0.01281,0.01345,0.01411,0.01478,
+#' 0.01546,0.01613,0.01679,0.01743,0.01806,0.01867,0.01926,
+#' 0.01983,0.02038,0.02092,0.02143,0.02192,0.02239,0.02285,
+#' 0.02329,0.02371,0.02411,0.0245,0.02488,0.02524,0.02558,
+#' 0.02592,0.02624,0.02655,0.02685)
 #' @examples curve <-curvezc(rates, "continuous")
-#' @examples g2model <- g2(curve, a=0.773511777, b=0.082013014, sigma=0.022284644, eta=0.010382461, rho=-0.701985206)
+#' @examples g2model <- g2(curve, a=0.773511777, b=0.082013014,
+#' sigma=0.022284644, eta=0.010382461, rho=-0.701985206)
 #' @examples g2model <- project(g2model)
 #' @examples zc10 <- zctable(g2model, 10)
 #'
 #' @export
-#' @docType methods
 setGeneric(
   name="zctable",
   def = function(.Object, t)
@@ -302,20 +347,31 @@ setMethod(
 ############################################
 ############################################
 
-#' G2 ++ model
+## Deflator table
+
+#' G2 ++ model: deflator
 #'
 #' \code{deflator} computes the deflator table.
 #'
+#' @param .Object G2 object.
+#'
 #' @return The deflator table.
 #'
-#' @examples rates <- c(-0.00316,-0.00269,-0.00203,-0.00122,-0.00022,0.00092,0.00215,0.00342,0.00465,0.00581,0.00684,0.00777,0.00861,0.00933,0.00989,0.0103,0.01061,0.01092,0.01127,0.0117,0.01222,0.01281,0.01345,0.01411,0.01478,0.01546,0.01613,0.01679,0.01743,0.01806,0.01867,0.01926,0.01983,0.02038,0.02092,0.02143,0.02192,0.02239,0.02285,0.02329,0.02371,0.02411,0.0245,0.02488,0.02524,0.02558,0.02592,0.02624,0.02655,0.02685)
+#' @examples rates <- c(-0.00316,-0.00269,-0.00203,-0.00122,
+#' -0.00022,0.00092,0.00215,0.00342,0.00465,0.00581,0.00684,
+#' 0.00777,0.00861,0.00933,0.00989,0.0103,0.01061,0.01092,
+#' 0.01127,0.0117,0.01222,0.01281,0.01345,0.01411,0.01478,
+#' 0.01546,0.01613,0.01679,0.01743,0.01806,0.01867,0.01926,
+#' 0.01983,0.02038,0.02092,0.02143,0.02192,0.02239,0.02285,
+#' 0.02329,0.02371,0.02411,0.0245,0.02488,0.02524,0.02558,
+#' 0.02592,0.02624,0.02655,0.02685)
 #' @examples curve <-curvezc(rates, "continuous")
-#' @examples g2model <- g2(curve, a=0.773511777, b=0.082013014, sigma=0.022284644, eta=0.010382461, rho=-0.701985206)
+#' @examples g2model <- g2(curve, a=0.773511777, b=0.082013014,
+#' sigma=0.022284644, eta=0.010382461, rho=-0.701985206)
 #' @examples g2model <- project(g2model)
 #' @examples def <- deflator(g2model)
 #'
 #' @export
-#' @docType methods
 setGeneric(
   name="deflator",
   def = function(.Object)
@@ -339,18 +395,29 @@ setMethod(
 ############################################
 ############################################
 
+## Deflator test
+
 #' Deflator test
 #'
 #' \code{test_deflator} compares the initial zero coupon rate curve with the one computed from the deflator.
 #'
-#' @examples rates <- c(-0.00316,-0.00269,-0.00203,-0.00122,-0.00022,0.00092,0.00215,0.00342,0.00465,0.00581,0.00684,0.00777,0.00861,0.00933,0.00989,0.0103,0.01061,0.01092,0.01127,0.0117,0.01222,0.01281,0.01345,0.01411,0.01478,0.01546,0.01613,0.01679,0.01743,0.01806,0.01867,0.01926,0.01983,0.02038,0.02092,0.02143,0.02192,0.02239,0.02285,0.02329,0.02371,0.02411,0.0245,0.02488,0.02524,0.02558,0.02592,0.02624,0.02655,0.02685)
+#' @param .Object G2 object. The object whose model is to be projected.
+#'
+#' @examples rates <- c(-0.00316,-0.00269,-0.00203,-0.00122,
+#' -0.00022,0.00092,0.00215,0.00342,0.00465,0.00581,0.00684,
+#' 0.00777,0.00861,0.00933,0.00989,0.0103,0.01061,0.01092,
+#' 0.01127,0.0117,0.01222,0.01281,0.01345,0.01411,0.01478,
+#' 0.01546,0.01613,0.01679,0.01743,0.01806,0.01867,0.01926,
+#' 0.01983,0.02038,0.02092,0.02143,0.02192,0.02239,0.02285,
+#' 0.02329,0.02371,0.02411,0.0245,0.02488,0.02524,0.02558,
+#' 0.02592,0.02624,0.02655,0.02685)
 #' @examples curve <-curvezc(rates, "continuous")
-#' @examples g2model <- g2(curve, a=0.773511777, b=0.082013014, sigma=0.022284644, eta=0.010382461, rho=-0.701985206)
+#' @examples g2model <- g2(curve, a=0.773511777, b=0.082013014,
+#' sigma=0.022284644, eta=0.010382461, rho=-0.701985206)
 #' @examples g2model <- project(g2model)
 #' @examples zc10 <- test_deflator(g2model)
 #'
 #' @export
-#' @docType methods
 setGeneric(
   name="test_deflator",
   def = function(.Object)
@@ -378,24 +445,34 @@ setMethod(
 ############################################
 ############################################
 
+## Compute swaption prices
+
 #' Swaptions prices
 #'
 #' \code{price_swaption} prices a swaption according to the g2++ model.
 #'
-#'  @param freqS Numeric. Swaption frequence, as the number of payments per period.
-#'  @param matS Numeric. Maturity of the swaption.
-#'  @param tenorS Numeric. Tenor of the swaption.
+#' @param .Object G2 object. The object whose model is to be projected.
+#' @param freqS Numeric. Swaption frequence, as the number of payments per period.
+#' @param matS Numeric. Maturity of the swaption.
+#' @param tenorS Numeric. Tenor of the swaption.
 #'
-#'  @return The price of the swaption
+#' @return The price of the swaption
 #'
-#' @examples rates <- c(-0.00316,-0.00269,-0.00203,-0.00122,-0.00022,0.00092,0.00215,0.00342,0.00465,0.00581,0.00684,0.00777,0.00861,0.00933,0.00989,0.0103,0.01061,0.01092,0.01127,0.0117,0.01222,0.01281,0.01345,0.01411,0.01478,0.01546,0.01613,0.01679,0.01743,0.01806,0.01867,0.01926,0.01983,0.02038,0.02092,0.02143,0.02192,0.02239,0.02285,0.02329,0.02371,0.02411,0.0245,0.02488,0.02524,0.02558,0.02592,0.02624,0.02655,0.02685)
+#' @examples rates <- c(-0.00316,-0.00269,-0.00203,-0.00122,
+#' -0.00022,0.00092,0.00215,0.00342,0.00465,0.00581,0.00684,
+#' 0.00777,0.00861,0.00933,0.00989,0.0103,0.01061,0.01092,
+#' 0.01127,0.0117,0.01222,0.01281,0.01345,0.01411,0.01478,
+#' 0.01546,0.01613,0.01679,0.01743,0.01806,0.01867,0.01926,
+#' 0.01983,0.02038,0.02092,0.02143,0.02192,0.02239,0.02285,
+#' 0.02329,0.02371,0.02411,0.0245,0.02488,0.02524,0.02558,
+#' 0.02592,0.02624,0.02655,0.02685)
 #' @examples curve <-curvezc(rates, "continuous")
-#' @examples g2model <- g2(curve, a=0.773511777, b=0.082013014, sigma=0.022284644, eta =0.010382461, rho =-0.701985206)
+#' @examples g2model <- g2(curve, a=0.773511777, b=0.082013014,
+#' sigma=0.022284644, eta =0.010382461, rho =-0.701985206)
 #' @examples g2model <- project(g2model)
 #' @examples price_swaption <- price_swaption(g2model, 2, 3, 3)
 #'
 #' @export
-#' @docType methods
 setGeneric(
   name="price_swaption",
   def = function(.Object, freqS, matS, tenorS)
@@ -459,18 +536,20 @@ setMethod(
 ############################################
 ############################################
 
+## Calibration function
+
 #' Rate model calibration
 #'
 #' \code{calibrate} calibrates the model on swaptions prices.
 #'
-#'  @param swaptions Swaptions. List of swaptions under the format of the class Swaption.
-#'  @param maxiter Numeric. Max number of iterations for Nelder-Mead algorithm. Default to 1000.
-#'  @param monitor Boolean. To display intermediary results. Default to TRUE.
+#' @param .Object G2 object. The object whose model is to be projected.
+#' @param swaptions Swaptions. List of swaptions under the format of the class Swaption.
+#' @param maxIter Numeric. Max number of iterations for Nelder-Mead algorithm. Default to 1000.
+#' @param monitor Boolean. To display intermediary results. Default to TRUE.
 #'
-#'  @return The calibrated model
+#' @return The calibrated model.
 #'
 #' @export
-#' @docType methods
 setGeneric(
   name="calibrate",
   def = function(.Object, swaptions, maxIter = 1000, monitor = TRUE)

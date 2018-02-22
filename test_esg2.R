@@ -56,7 +56,7 @@ plot(swaptions)
 
 # Definition of the model
 
-g2model <- g2(curve, horizon = 50, nsimul = 1000)
+g2model <- g2(curve, horizon = 50, nsimul = 10000)
 
 # Calibration of the model on swaptions prices (~ 1 min on i5)
 
@@ -89,7 +89,7 @@ def <- deflator(g2model)
 
 # Get zero coupon table at time 10
 
-zc10 <- zctable(g2model, 40)
+zc10 <- zctable(g2model, 10)
 
 #---------- Add an action model ----
 
