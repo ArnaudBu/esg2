@@ -3,10 +3,36 @@
 \docType{class}
 \name{Swaptions-class}
 \alias{Swaptions-class}
+\alias{plot,Swaptions,missing-method}
+\alias{print,Swaptions-method}
+\alias{show,Swaptions-method}
 \title{Swaptions}
+\usage{
+\S4method{plot}{Swaptions,missing}(x, y)
+
+\S4method{print}{Swaptions}(x)
+
+\S4method{show}{Swaptions}(object)
+}
+\arguments{
+\item{x}{the Swaptions object to plot}
+
+\item{y}{classical plot parameters. Useless here.}
+
+\item{object}{the Swaptions object to show}
+}
 \description{
 An S4 class to represent ATM swaptions for calibration of a G2++ model.
 }
+\section{Methods (by generic)}{
+\itemize{
+\item \code{plot}: plot method for Swaptions
+
+\item \code{print}: print method for Swaptions
+
+\item \code{show}: show method for Swaptions
+}}
+
 \section{Slots}{
 
 \describe{

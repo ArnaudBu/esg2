@@ -3,10 +3,36 @@
 \docType{class}
 \name{BS-class}
 \alias{BS-class}
+\alias{plot,BS,missing-method}
+\alias{print,BS-method}
+\alias{show,BS-method}
 \title{Black & Scholes}
+\usage{
+\S4method{plot}{BS,missing}(x, y)
+
+\S4method{print}{BS}(x)
+
+\S4method{show}{BS}(object)
+}
+\arguments{
+\item{x}{the BS object to plot}
+
+\item{y}{classical plot parameters. Useless here.}
+
+\item{object}{the BS object to show}
+}
 \description{
 An S4 class to represent a Black & Scholes assets built upon G2 class
 }
+\section{Methods (by generic)}{
+\itemize{
+\item \code{plot}: plot method for BS
+
+\item \code{print}: print method for BS
+
+\item \code{show}: show method for BS
+}}
+
 \section{Slots}{
 
 \describe{

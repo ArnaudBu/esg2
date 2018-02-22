@@ -1,3 +1,6 @@
+#### Black & Scholes asset class ####
+#####################################
+
 #' Black & Scholes
 #'
 #' An S4 class to represent a Black & Scholes assets built upon G2 class
@@ -19,7 +22,8 @@ setClass(Class = "BS",
            div = "numeric",
            rho = "numeric",
            s = "matrix"
-         )
+         ),
+         validity = check_bs
 )
 
 ############################################
@@ -50,6 +54,7 @@ setMethod(
     colnames(s) <- 1:g2model@horizon
     .Object@s <- s
     # Return object
+    validObject(.Object)
     return(.Object)
   }
 )
@@ -72,9 +77,16 @@ setMethod(
 #'
 #' @return The model as a class.
 #'
-#' @examples rates <- c(-0.00316,-0.00269,-0.00203,-0.00122,-0.00022,0.00092,0.00215,0.00342,0.00465,0.00581,0.00684,0.00777,0.00861,0.00933,0.00989,0.0103,0.01061,0.01092,0.01127,0.0117,0.01222,0.01281,0.01345,0.01411,0.01478,0.01546,0.01613,0.01679,0.01743,0.01806,0.01867,0.01926,0.01983,0.02038,0.02092,0.02143,0.02192,0.02239,0.02285,0.02329,0.02371,0.02411,0.0245,0.02488,0.02524,0.02558,0.02592,0.02624,0.02655,0.02685)
+#' @examples rates <- c(-0.00316,-0.00269,-0.00203,-0.00122,-0.00022,
+#' 0.00092,0.00215,0.00342,0.00465,0.00581,0.00684,0.00777,0.00861,
+#' 0.00933,0.00989,0.0103,0.01061,0.01092,0.01127,0.0117,0.01222,
+#' 0.01281,0.01345,0.01411,0.01478,0.01546,0.01613,0.01679,0.01743,
+#' 0.01806,0.01867,0.01926,0.01983,0.02038,0.02092,0.02143,0.02192,
+#' 0.02239,0.02285,0.02329,0.02371,0.02411,0.0245,0.02488,0.02524,
+#' 0.02558,0.02592,0.02624,0.02655,0.02685)
 #' @examples curve <-curvezc(rates, "continuous")
-#' @examples g2model <- g2(curve, a=0.773511777, b=0.082013014, sigma=0.022284644, eta=0.010382461, rho=-0.701985206)
+#' @examples g2model <- g2(curve, a=0.773511777, b=0.082013014,
+#' sigma=0.022284644, eta=0.010382461, rho=-0.701985206)
 #' @examples g2model <- project(g2model)
 #' @examples action <- bs(g2model, 1, 0.2, 0.02, -0.5)
 #'
@@ -93,13 +105,17 @@ bs <- function(g2model, s0 = 1, vol = 0.2, div = 0.02, rho = -0.5, W = "auto"){
 ############################################
 ############################################
 
-# Plot method for class BS
-#' @importFrom graphics plot abline layout legend lines mtext par points title matplot
+## Plot method
+
+#' @describeIn BS plot method for BS
+#' @param x the BS object to plot
+#' @param y classical plot parameters. Useless here.
+#' @import graphics grDevices
 #' @export
 setMethod(
   f = "plot",
   signature = signature(x = "BS", y = "missing"),
-  definition = function(x, y, ...){
+  definition = function(x, y){
     tr <- x@s
     tr <- cbind(x@s0, tr)
     colnames(tr)[1] <- 0
@@ -120,7 +136,9 @@ setMethod(
 ############################################
 ############################################
 
-# Print method for class BS
+## Print method for class BS
+
+#' @describeIn BS print method for BS
 #' @export
 setMethod(
   f = "print",
@@ -138,7 +156,10 @@ setMethod(
 ############################################
 ############################################
 
-# Show method for class BS
+## Show method for class BS
+
+#' @describeIn BS show method for BS
+#' @param object the BS object to show
 #' @export
 setMethod(
   f = "show",
@@ -160,17 +181,26 @@ setMethod(
 #'
 #' \code{traj} returns the trajectories for the Black & Sholes model.
 #'
-#' @return The trajectories.
+#' @param .Object BS Object whose trajectories are wanted.
 #'
-#' @examples rates <- c(-0.00316,-0.00269,-0.00203,-0.00122,-0.00022,0.00092,0.00215,0.00342,0.00465,0.00581,0.00684,0.00777,0.00861,0.00933,0.00989,0.0103,0.01061,0.01092,0.01127,0.0117,0.01222,0.01281,0.01345,0.01411,0.01478,0.01546,0.01613,0.01679,0.01743,0.01806,0.01867,0.01926,0.01983,0.02038,0.02092,0.02143,0.02192,0.02239,0.02285,0.02329,0.02371,0.02411,0.0245,0.02488,0.02524,0.02558,0.02592,0.02624,0.02655,0.02685)
+#' @return The trajectories as a matrix.
+#'
+#' @examples rates <- c(-0.00316,-0.00269,-0.00203,-0.00122,
+#' -0.00022,0.00092,0.00215,0.00342,0.00465,0.00581,0.00684,
+#' 0.00777,0.00861,0.00933,0.00989,0.0103,0.01061,0.01092,
+#' 0.01127,0.0117,0.01222,0.01281,0.01345,0.01411,0.01478,
+#' 0.01546,0.01613,0.01679,0.01743,0.01806,0.01867,0.01926,
+#' 0.01983,0.02038,0.02092,0.02143,0.02192,0.02239,0.02285,
+#' 0.02329,0.02371,0.02411,0.0245,0.02488,0.02524,0.02558,
+#' 0.02592,0.02624,0.02655,0.02685)
 #' @examples curve <-curvezc(rates, "continuous")
-#' @examples g2model <- g2(curve, a=0.773511777, b=0.082013014, sigma=0.022284644, eta=0.010382461, rho=-0.701985206)
+#' @examples g2model <- g2(curve, a=0.773511777, b=0.082013014,
+#' sigma=0.022284644, eta=0.010382461, rho=-0.701985206)
 #' @examples g2model <- project(g2model)
 #' @examples action <- bs(g2model, 1, 0.2, 0.02, -0.5)
 #' @examples trajAction <- traj(action)
 #'
 #' @export
-#' @docType methods
 setGeneric(
   name="traj",
   def = function(.Object)
@@ -195,15 +225,23 @@ setMethod(
 #'
 #' \code{test_martingal} tests the martingality of the projections.
 #'
-#' @examples rates <- c(-0.00316,-0.00269,-0.00203,-0.00122,-0.00022,0.00092,0.00215,0.00342,0.00465,0.00581,0.00684,0.00777,0.00861,0.00933,0.00989,0.0103,0.01061,0.01092,0.01127,0.0117,0.01222,0.01281,0.01345,0.01411,0.01478,0.01546,0.01613,0.01679,0.01743,0.01806,0.01867,0.01926,0.01983,0.02038,0.02092,0.02143,0.02192,0.02239,0.02285,0.02329,0.02371,0.02411,0.0245,0.02488,0.02524,0.02558,0.02592,0.02624,0.02655,0.02685)
+#' @param .Object BS Object on which the test is to be applied.
+#'
+#' @examples rates <- c(-0.00316,-0.00269,-0.00203,-0.00122,-0.00022,
+#' 0.00092,0.00215,0.00342,0.00465,0.00581,0.00684,0.00777,0.00861,
+#' 0.00933,0.00989,0.0103,0.01061,0.01092,0.01127,0.0117,0.01222,
+#' 0.01281,0.01345,0.01411,0.01478,0.01546,0.01613,0.01679,0.01743,
+#' 0.01806,0.01867,0.01926,0.01983,0.02038,0.02092,0.02143,0.02192,
+#' 0.02239,0.02285,0.02329,0.02371,0.02411,0.0245,0.02488,0.02524,
+#' 0.02558,0.02592,0.02624,0.02655,0.02685)
 #' @examples curve <-curvezc(rates, "continuous")
-#' @examples g2model <- g2(curve, a=0.773511777, b=0.082013014, sigma=0.022284644, eta=0.010382461, rho=-0.701985206)
+#' @examples g2model <- g2(curve, a=0.773511777, b=0.082013014,
+#' sigma=0.022284644, eta=0.010382461, rho=-0.701985206)
 #' @examples g2model <- project(g2model)
 #' @examples action <- bs(g2model, 1, 0.2, 0.02, -0.5)
 #' @examples test_martingal(action)
 #'
 #' @export
-#' @docType methods
 setGeneric(
   name="test_martingal",
   def = function(.Object)

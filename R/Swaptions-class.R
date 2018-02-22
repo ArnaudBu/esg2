@@ -1,3 +1,8 @@
+#### Swaptions class ####
+#########################
+
+## Class definition
+
 #' Swaptions
 #'
 #' An S4 class to represent ATM swaptions for calibration of a G2++ model.
@@ -24,7 +29,8 @@ setClass(Class = "Swaptions",
            vol = "vector",
            freq = "numeric",
            price = "vector"
-         )
+         ),
+         validity = check_swaptions
 )
 
 ############################################
@@ -65,6 +71,7 @@ setMethod(
     }
     .Object@price <- p
     # Return of the object
+    validObject(.Object)
     return(.Object)
   }
 )
@@ -72,14 +79,14 @@ setMethod(
 ############################################
 ############################################
 
-# User constructor function
+## User constructor function
 
 #' Swaptions: constructor
 #'
 #' @param type Character. Type of volatility:
 #' \itemize{
 #'   \item{"normal".}
-#'   \item{"lognormal". Default value}}
+#'   \item{"lognormal". Default value.}}
 #' @param curve ZCCurve. Zero coupon curve to use for pricing.
 #' @param mat Vector. List of maturities.
 #' @param tenor Vector. List of tenors.
@@ -88,8 +95,14 @@ setMethod(
 #'
 #' @return A Swaptions object.
 #'
-#' @examples rates <- c(-0.00316,-0.00269,-0.00203,-0.00122,-0.00022,0.00092,0.00215,0.00342,0.00465,0.00581,0.00684,0.00777,0.00861,0.00933,0.00989,0.0103,0.01061,0.01092,0.01127,0.0117,0.01222,0.01281,0.01345,0.01411,0.01478,0.01546,0.01613,0.01679,0.01743,0.01806,0.01867,0.01926,0.01983,0.02038,0.02092,0.02143,0.02192,0.02239,0.02285,0.02329,0.02371,0.02411,0.0245,0.02488,0.02524,0.02558,0.02592,0.02624,0.02655,0.02685)
-#' @examples curve <-curve(rates, "continuous")
+#' @examples rates <- c(-0.00316,-0.00269,-0.00203,-0.00122,-0.00022,
+#' 0.00092,0.00215,0.00342,0.00465,0.00581,0.00684,0.00777,0.00861,
+#' 0.00933,0.00989,0.0103,0.01061,0.01092,0.01127,0.0117,0.01222,
+#' 0.01281,0.01345,0.01411,0.01478,0.01546,0.01613,0.01679,0.01743,
+#' 0.01806,0.01867,0.01926,0.01983,0.02038,0.02092,0.02143,0.02192,
+#' 0.02239,0.02285,0.02329,0.02371,0.02411,0.0245,0.02488,0.02524,
+#' 0.02558,0.02592,0.02624,0.02655,0.02685)
+#' @examples curve <-curvezc(rates, "continuous")
 #' @examples swaptions <- swaptions("lognormal", curve, 1, 1, 0.016735, 1)
 #'
 #' @export
@@ -108,14 +121,17 @@ swaptions <- function(type = "lognormal", curve, mat, tenor, vol, freq = 1){
 ############################################
 ############################################
 
-# Plot method for class Swaptions
-#' @importFrom graphics plot abline layout legend lines mtext par points title matplot
-#' @import grDevices
+## Plot method
+
+#' @describeIn Swaptions plot method for Swaptions
+#' @param x the Swaptions object to plot
+#' @param y classical plot parameters. Useless here.
+#' @import graphics grDevices
 #' @export
 setMethod(
   f = "plot",
   signature = signature(x = "Swaptions", y = "missing"),
-  definition = function(x, y, ...){
+  definition = function(x, y){
     # Construction of the plot surface
     mat <- min(x@mat):max(x@mat)
     ten <- min(x@tenor):max(x@tenor)
@@ -147,7 +163,9 @@ setMethod(
 ############################################
 ############################################
 
-# Print method for class Swaptions
+## Print method
+
+#' @describeIn Swaptions print method for Swaptions
 #' @export
 setMethod(
   f = "print",
@@ -168,7 +186,10 @@ setMethod(
 ############################################
 ############################################
 
-# Show method for class Swaptions
+## Show method
+
+#' @describeIn Swaptions show method for Swaptions
+#' @param object the Swaptions object to show
 #' @export
 setMethod(
   f = "show",

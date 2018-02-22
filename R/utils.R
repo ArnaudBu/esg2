@@ -143,3 +143,20 @@ genW=function(correl, s = 1000, p = 50)
 check_zc <- function(object){
   if(!(object@method %in% c("continuous", "actuarial", "libor"))) stop("Invalid method for class ZCCurve.")
 }
+
+## Validity check for class swaptions
+
+check_swaptions <- function(object){
+  if(!(object@type %in% c("lognormal", "normal"))) stop("Invalid type choice. Should be either normal or lognormal.")
+  if(object@freq %% 1 != 0 | object@freq <=0) stop("Invalid frequence. Should be an integer superior to 0.")
+  if(!all(c(length(object@tenor), length(object@vol)) == length(object@mat))) stop("Inconsistent lengths between maturities, tenors, and volatilities vectors.")
+}
+
+## Validity check for class BS
+
+check_bs <- function(object){
+  if(object@s0 <= 0) stop("Invalid start value for the projection.")
+  if(object@vol < 0) stop("Invalid volatility value for the projection.")
+  if(object@div < 0) stop("Invalid dividend rate value for the projection.")
+  if(object@rho < -1 | object@rho > 1) stop("Invalid correlation value for the projection.")
+}
