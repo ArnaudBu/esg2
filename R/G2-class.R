@@ -570,7 +570,7 @@ setMethod(
   definition=function(.Object, swaptions, maxIter = 1000, input_param = "auto", monitor = TRUE)
   {
     # Parameters for optimisation
-    if(input_param[1] == "auto"){
+    if(all(input_param == "auto")){
     input_param <- data.frame(Parameter = c("a", "b", "sigma", "eta", "rho"),
                               Initial.point = c(0.1, 0.25, 0.05, 0.025, 0),
                               Min = c(0.001, 0.0001, 0.0001, 0.001, -1),
