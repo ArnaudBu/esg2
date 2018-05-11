@@ -436,7 +436,7 @@ setMethod(
     plot(r_table, type = "l", lwd = 3, col = rgb(99/255, 24/255, 66/255), xlab = "maturity", ylab = "rate")
     lines(.Object@curve@rates, lwd = 3, col = "#1de9b6")
     cat("Differences in percent by maturity: \n")
-    dif <- paste0(round(abs(.Object@curve@rates -r_table) *100, 2), "%")
+    dif <- paste0(round(abs(.Object@curve@rates[1:.Object@horizon] -r_table) *100, 2), "%")
     names(dif) <- 1:length(r_table)
     print(dif)
   }
@@ -545,6 +545,12 @@ setMethod(
 #' @param .Object G2 object. The object whose model is to be projected.
 #' @param swaptions Swaptions. List of swaptions under the format of the class Swaption.
 #' @param maxIter Numeric. Max number of iterations for Nelder-Mead algorithm. Default to 1000.
+#' @param input_param Data.frame. Input parameters for optimization. It must have 4 columns of 5 rows each:
+#' #' \itemize{
+#'   \item{"Parameter": always equals to c("a", "b", "sigma", "eta", "rho").}
+#'   \item{"Initial.point": Initial point for optimization. Default to c(0.1, 0.25, 0.05, 0.025, 0).}
+#'   \item{"Min": Minimum admissible value for parameters. Default to c(0.001, 0.0001, 0.0001, 0.001, -1).}
+#'   \item{"Max": Maximimu admissible value for parameters. Default to c(0.2, 0.5, 0.1, 0.05, 1).}}
 #' @param monitor Boolean. To display intermediary results. Default to TRUE.
 #'
 #' @return The calibrated model.
@@ -552,7 +558,7 @@ setMethod(
 #' @export
 setGeneric(
   name="calibrate",
-  def = function(.Object, swaptions, maxIter = 1000, monitor = TRUE)
+  def = function(.Object, swaptions, maxIter = 1000, input_param = "auto", monitor = TRUE)
   {
     standardGeneric("calibrate")
   }
@@ -561,13 +567,15 @@ setGeneric(
 setMethod(
   f="calibrate",
   signature="G2",
-  definition=function(.Object, swaptions, maxIter = 1000, monitor = TRUE)
+  definition=function(.Object, swaptions, maxIter = 1000, input_param = "auto", monitor = TRUE)
   {
     # Parameters for optimisation
+    if(input_param[1] == "auto"){
     input_param <- data.frame(Parameter = c("a", "b", "sigma", "eta", "rho"),
                               Initial.point = c(0.1, 0.25, 0.05, 0.025, 0),
                               Min = c(0.001, 0.0001, 0.0001, 0.001, -1),
                               Max = c(0.2, 0.5, 0.1, 0.05, 1))
+    }
     freq = swaptions@freq
     priceSwaptions <- data.frame(mat = swaptions@mat, tenor = swaptions@tenor, price = swaptions@price)
     f0 <- .Object@curve@ifr[10]

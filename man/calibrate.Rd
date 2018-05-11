@@ -4,7 +4,8 @@
 \alias{calibrate}
 \title{Rate model calibration}
 \usage{
-calibrate(.Object, swaptions, maxIter = 1000, monitor = TRUE)
+calibrate(.Object, swaptions, maxIter = 1000, input_param = "auto",
+  monitor = TRUE)
 }
 \arguments{
 \item{.Object}{G2 object. The object whose model is to be projected.}
@@ -12,6 +13,13 @@ calibrate(.Object, swaptions, maxIter = 1000, monitor = TRUE)
 \item{swaptions}{Swaptions. List of swaptions under the format of the class Swaption.}
 
 \item{maxIter}{Numeric. Max number of iterations for Nelder-Mead algorithm. Default to 1000.}
+
+\item{input_param}{Data.frame. Input parameters for optimization. It must have 4 columns of 5 rows each:
+#' \itemize{
+  \item{"Parameter": always equals to c("a", "b", "sigma", "eta", "rho").}
+  \item{"Initial.point": Initial point for optimization. Default to c(0.1, 0.25, 0.05, 0.025, 0).}
+  \item{"Min": Minimum admissible value for parameters. Default to c(0.001, 0.0001, 0.0001, 0.001, -1).}
+  \item{"Max": Maximimu admissible value for parameters. Default to c(0.2, 0.5, 0.1, 0.05, 1).}}}
 
 \item{monitor}{Boolean. To display intermediary results. Default to TRUE.}
 }
