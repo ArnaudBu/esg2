@@ -64,7 +64,7 @@ g2model <- calibrate(g2model, swaptions, maxIter = 100)
 
 # Generate correlated distributions
 
-correl <- cbind(c(1,g2model@rho, 0.25),c(g2model@rho,1, 0), c(0.25, 0, 1))
+correl <- cbind(c(1,g2model@rho, 0.25, 0.5),c(g2model@rho,1, 0.25, 0.5), c(0.25, 0.25, 1,0), c(0.5,0.5,0,1))
 W <- genW(correl, g2model@nsimul, g2model@horizon)
 
 # Projection of the model
@@ -117,3 +117,32 @@ trajAction <- traj(action)
 # Martingal test
 
 test_martingal(action)
+
+#---------- Add an inflation model ----
+
+# Definition
+
+
+
+index <- c(100,102.32,104.47,106.23,108.21,110.36,
+           111.66,112.4,112.97,114.84,116.7,119.03,121.46,124.01,126.33,
+           128.37,130.29,133.98,134.09,136.13,139.01,141.73,142.92,
+           143.66,143.71,144,145.41)
+inflation <- vsk(index_histo = index,
+                 W = W[,,4])
+
+# Visualization
+
+inflation
+
+print(inflation)
+
+draw(inflation, type = "rate")
+
+draw(inflation, type = "index")
+
+# Get the trajectories
+
+trajInflation <- trajv(inflation, type = "rate")
+
+indexInflation <- trajv(inflation, type = "index")

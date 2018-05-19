@@ -167,3 +167,9 @@ check_g2 <- function(object){
   if(object@horizon %% 1 != 0 | object@horizon < 0) stop("Invalid horizon. Should be an integer superior to 0.")
   if(object@nsimul %% 1 != 0 | object@nsimul < 0) stop("Invalid number of simulation. Should be an integer superior to 0.")
 }
+
+## Validity check for class VSK
+
+check_vsk <- function(object){
+  if(object@sigma < 0) stop("Invalid volatility value for the projection.")
+}

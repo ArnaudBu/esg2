@@ -20,3 +20,4 @@ Collate:
     'Swaptions-class.R'
     'G2-class.R'
     'BS-class.R'
+    'VSK-class.R'

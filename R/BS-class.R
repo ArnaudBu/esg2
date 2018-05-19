@@ -139,6 +139,7 @@ setMethod(
 ## Print method for class BS
 
 #' @describeIn BS print method for BS
+#'
 #' @export
 setMethod(
   f = "print",
