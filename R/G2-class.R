@@ -287,6 +287,7 @@ setMethod(
 #'
 #' @param .Object G2 object.
 #' @param t Numeric. Time for computation.
+#' @param length Numeric. Length of the curve, in time steps. If not given, the curve is given until the horizon of projection.
 #'
 #' @return The zero-coupon table at time t.
 #'
@@ -307,7 +308,7 @@ setMethod(
 #' @export
 setGeneric(
   name="zctable",
-  def = function(.Object, t)
+  def = function(.Object, t = 0, length = NULL)
   {
     standardGeneric("zctable")
   }
@@ -316,12 +317,16 @@ setGeneric(
 setMethod(
   f="zctable",
   signature="G2",
-  definition=function(.Object, t = 0)
+  definition=function(.Object, t = 0, length = NULL)
   {
     # Definition of the objects useful to computation
     x = .Object@x
     y = .Object@y
-    NP = .Object@horizon
+    if(is.null(length)){
+      NP = .Object@horizon
+    } else {
+      NP = t + length
+    }
     NS = .Object@nsimul
     a =  .Object@a
     b = .Object@b

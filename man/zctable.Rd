@@ -4,12 +4,14 @@
 \alias{zctable}
 \title{G2 ++ model: construction of a zero coupon prices table.}
 \usage{
-zctable(.Object, t)
+zctable(.Object, t = 0, length = NULL)
 }
 \arguments{
 \item{.Object}{G2 object.}
 
 \item{t}{Numeric. Time for computation.}
+
+\item{length}{Numeric. Length of the curve, in time steps. If not given, the curve is given until the horizon of projection.}
 }
 \value{
 The zero-coupon table at time t.
