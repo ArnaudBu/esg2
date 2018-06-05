@@ -83,7 +83,7 @@ vsk <- function(q0 = NULL, a = NULL, b = NULL, horizon = 50, nsimul = 1000, sigm
   W <- W[1:nsimul, 1:horizon]
   if((is.null(q0) | is.null(a) | is.null(b) | is.null(sigma)) & is.null(index_histo) & is.null(q_histo)) stop("Too many missing parameters for projection. We need either q0, a, b and sigma or index_histo or q_histo.")
   if(is.null(q0) | is.null(a) | is.null(b) | is.null(sigma)){
-    if(is.null(q_histo) & !is.null(index_histo)) q_histo <- log(index[-1]/index[-length(index)])
+    if(is.null(q_histo) & !is.null(index_histo)) q_histo <- log(index_histo[-1]/index_histo[-length(index_histo)])
     if(is.null(q0)) q0 <- q_histo[length(q_histo)]
     if(is.null(a) | is.null(b) | is.null(sigma)){
       dflearn <- data.frame(x = q_histo[-length(q_histo)], y = q_histo[-1])
