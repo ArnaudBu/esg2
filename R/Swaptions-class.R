@@ -66,7 +66,7 @@ setMethod(
         p[i] <- s0 * (pnorm(d1) - pnorm(d2)) * payments
       } else{
         d <- 0
-        p[i] <- volSwap * (dnorm(d)) * payments
+        p[i] <- volSwap * (dnorm(d)) * payments  * sqrt(matSwap)
       }
     }
     .Object@price <- p
